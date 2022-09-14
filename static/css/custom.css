@@ -1,0 +1,32 @@
+.bg-BRBLUE {
+    --bs-bg-opacity: 1;
+    background-color: #ff8f0f; /* Teaminator Blue - used in banner background */
+}
+
+body{
+    position: relative;
+    padding-bottom: 58px;
+    min-height: 100vh;
+}
+
+/* Used to keep footer on bottom of page when not much content on screen */
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Used to embed youtube video in center of screen */
+.iframe-container{
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; 
+    height: 0;
+}
+.iframe-container iframe{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}

@@ -1,0 +1,47 @@
+{% extends "baseWithBanner.html" %}
+{% block content %}
+<body>
+    <!-- About us card-->
+    <div class="card mx-auto my-5" style="width: 50%;">
+        <div class="card-body">
+        <h3 class="card-title">Our story</h3>
+        <p class="card-text text-center">We are three students that have found ourselves working in group projects with people that simply don't put effort in and still get good grades, our goal is solve that problem before it happens.</p>
+        </div>
+    </div>
+        <!-- Card Grid -->
+        <h1 class="card-title text-center">Meet the Team</h1>
+        <section class="card-deck py-3 border-bottom">
+            <div class="container px-5 my-5">
+                <div class="row gy-6">
+                    <div class="card col-lg-4 mb-5">
+                        <img class="card-img-top rounded-3 mt-2" src="{{ url_for('static', filename='assets/mahmoud.jpg')}}" style="width:100%">
+                        <div class="card-body">
+                            <h4 class="card-title">Mahmoud Kofiah</h4>
+                            <p class="card-text">Boom</p>
+                            <p>Student at Kennesaw State University</p>
+                            <a href="https://www.linkedin.com/in/mahmoud-kofiah/" class="btn btn-primary">Contact</a>
+                        </div>
+                    </div>
+                    <div class="card col-lg-4 mb-5">
+                        <img class="card-img-top rounded-3 mt-2" src="{{ url_for('static', filename='assets/hadenglassessquare.jpg')}}" style="width:100%">
+                        <div class="card-body">
+                            <h4 class="card-title">Haden Sangree</h4>
+                            <p class="card-text">Bam</p>
+                            <p>Senior Mechatronics Engineering Student</p>
+                            <a href="https://www.linkedin.com/in/ashley-dukhu-5b997a18a/" class="btn btn-primary">Contact</a>
+                        </div>
+                    </div>
+                    <div class="card col-lg-4 mb-5">
+                        <img class="card-img-top rounded-3 mt-2" src="{{ url_for('static', filename='assets/Brandon.jpg')}}" style="width:100%">
+                        <div class="card-body">
+                            <h4 class="card-title">Brandon Baksh</h4>
+                            <p class="card-text">pow</p>
+                            <p>Field Service Engineer at MVE Biological Solutions || Mechatronics Engineering at KSU</p>
+                            <a href="https://www.linkedin.com/in/brandon-baksh-51a763118/" class="btn btn-primary">Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+    <body>
+        <!-- HMI Buttons-->
+        <section class="border-bottom py-3">
+            <div class="container">
+                <form action="#" method="post">
+                    <input type="submit" class="btn btn-primary btn-lrg" name="submit_button" value="Auto Run">
+                    <input type="submit" class="btn btn-danger btn-lrg" name="submit_button" value="Emergency Stop">
+                    <input type="submit" class="btn btn-secondary btn-lrg" name="submit_button" value="Feed Hold">
+                    <input type="submit" class="btn btn-secondary btn-lrg" name="submit_button" value="Calibrate">
+                    <input type="submit" class="btn btn-secondary btn-lrg" name="submit_button" value="Jog Z+">
+                    <input type="submit" class="btn btn-secondary btn-lrg" name="submit_button" value="Jog Z-">
+                    <input type="submit" class="btn btn-secondary btn-lrg" name="submit_button" value="Close Gripper">
+                    <input type="submit" class="btn btn-secondary btn-lrg" name="submit_button" value="Open Gripper">
+                    <input type="submit" class="btn btn-secondary btn-lrg" name="submit_button" value="Gripper Yaw CW">
+                    <input type="submit" class="btn btn-secondary btn-lrg" name="submit_button" value="Gripper Yaw CCW">
+                </form>
+            </div>
+        </section>
+    </body>
+</html>
+{% endblock %}
