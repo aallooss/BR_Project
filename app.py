@@ -57,3 +57,4 @@ def HMI():
 #MAIN
 if __name__ == '__main__':
     application.run(host='192.168.0.102', debug=True) # flask run --host=0.0.0.0 to run on LAN
+	#yerrrrrrrr
