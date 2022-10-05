@@ -9,13 +9,13 @@
         <!-- Favicon-->
         <link rel="icon" href="{{ url_for('static', filename='assets/owl_head_logo.png')}}" type = "image/x-icon"/>
         <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet" />
+        <link href="{{ url_for('static', filename='css/boostrap-icons.css')}}" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{{ url_for('static', filename='css/styles.css')}}" rel="stylesheet" />
         <!-- Custom CSS -->
         <link href="{{ url_for('static', filename='css/custom.css')}}" rel="stylesheet" />
         <!-- Social media icons-->
-        <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet"  >
+        <link href="{{ url_for('static', filename='css/all.css')}}" rel="stylesheet"  >
     </head>
     <body>
         <!-- Responsive navbar-->
@@ -55,7 +55,7 @@
         {% endblock %}
         </main>
         <footer class="py-3 bg-dark text-center"> <!-- "footer" only needed for when not much content on page-->
-            <a class="btn btn-primary" style="background-color: #ac2bac;" href="https://www.linkedin.com/in/mahmoud-kofiah/" role="button">
+            <!-- <a class="btn btn-primary" style="background-color: #ac2bac;" href="https://www.linkedin.com/in/mahmoud-kofiah/" role="button">
                 <i class="fab fa-linkedin"></i>
             </a>
             <a class="btn btn-primary" style="background-color: #ac2bac;" href="https://www.linkedin.com/in/hsangree/" role="button">
@@ -63,11 +63,11 @@
             </a>
             <a class="btn btn-primary" style="background-color: #ac2bac;" href="https://www.linkedin.com/in/brandon-baksh-51a763118/" role="button">
                 <i class="fab fa-linkedin"></i>
-            </a>
+            </a> -->
             <div class="container px-5"><p class="m-0 text-center text-white pb-2">Copyright &copy; MTRE4800</p></div>
         </footer>
         <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script> -->
         <!-- Core theme JS-->
     </body>
 </html>
