@@ -1,4 +1,5 @@
 import inspect
+import time
 import RPi.GPIO as GPIO
 from time import sleep
 from gpiozero import AngularServo
@@ -14,15 +15,6 @@ CW = 1
 CCW = 0
 
 
-# Setup pin layout on PI
-GPIO.setmode(GPIO.BOARD)
-
-# Establish Pins in software
-GPIO.setup(DIR, GPIO.OUT)
-GPIO.setup(STEP, GPIO.OUT)
-
-# Set the first direction you want it to spin
-GPIO.output(DIR, CW)
 
 
 
@@ -35,37 +27,6 @@ def log_call():
 #some of these functions can be likely be refactored to accept paramenter for ex. one function to 
 #change direction rather than two seperate functions
 def Auto_Run():
-
-    servo = AngularServo(12, min_pulse_width=.0006, max_pulse_width=0.0023)
-    servo2 = AngularServo(20, min_pulse_width=.0008, max_pulse_width=0.0022)
-    a= 1;
-    b = 0;
-    while (a < 5):
-        servo.angle = -90
-        sleep(.5)
-        servo.value = None;
-        sleep(.5)
-        servo2.angle = -90                          
-        sleep(.5)
-        servo2.value = None; 
-        sleep(1)
-        servo.angle = 0
-        sleep(.5)
-        servo.value = None;
-        sleep(.5)
-        servo2.angle = 90
-        sleep(.5)
-        servo2.value = None;
-        sleep(.5)
-        sleep(1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           )
-        a = a + 1
-        print(a)
-        if (a == 4):
-            break; 
-        elif (b == 1):
-            break;
-    servo.value = None;
-    servo2.value = None;
     log_call()
     
 def Emergency_Stop():
@@ -74,59 +35,70 @@ def Emergency_Stop():
 def feed_Hold():		
     log_call()
     
-def Calibrate():	
+def Calibrate():
     log_call()
     
-def Jog_Z_positive():
+def Jog_Z(steps,direction):     # 0/1 used to signify clockwise or counterclockwise.
     log_call()
-    try:
-        # Run forever.
-        while True:
+    # Setup pin layout on PI
+    GPIO.setmode(GPIO.BOARD)
+    # Establish Pins in software
+    GPIO.setup(DIR, GPIO.OUT)
+    GPIO.setup(STEP, GPIO.OUT)
 
-            """Change Direction: Changing direction requires time to switch. The
-            time is dictated by the stepper motor and controller. """
-            sleep(1.0)
-            # Esablish the direction you want to go
-            GPIO.output(DIR,CW)
+    print(direction)
+    # Esablish the direction you want to go
+    GPIO.output(DIR,direction)
+    # Run for 200 steps. This will change based on how you set you controller
+    for x in range(steps):
+        # Set one coil winding to high
+        GPIO.output(STEP,GPIO.HIGH)
+        # Allow it to get there.
+        sleep(.00005) # Dictates how fast stepper motor will run
+        # Set coil winding to low
+        GPIO.output(STEP,GPIO.LOW)
+        sleep(.00005) # Dictates how fast stepper motor will run
+    GPIO.cleanup()
 
-            # Run for 200 steps. This will change based on how you set you controller
-            for x in range(2000):
 
-                # Set one coil winding to high
-                GPIO.output(STEP,GPIO.HIGH)
-                # Allow it to get there.
-                sleep(.00005) # Dictates how fast stepper motor will run
-                # Set coil winding to low
-                GPIO.output(STEP,GPIO.LOW)
-                sleep(.00005) # Dictates how fast stepper motor will run
-
-            """Change Direction: Changing direction requires time to switch. The
-            time is dictated by the stepper motor and controller. """
-            sleep(1.0)
-            GPIO.output(DIR,CCW)
-            for x in range(2000):
-                GPIO.output(STEP,GPIO.HIGH)
-                sleep(.00005)
-                GPIO.output(STEP,GPIO.LOW)
-                sleep(.00005)
-
-    # Once finished clean everything up
-    except KeyboardInterrupt:
-        print("cleanup")
-        GPIO.cleanup()
-        log_call()
-    
-def Jog_Z_negative():	
+def Gripper():
     log_call()
-    
-def Close_Gripper():	
-    log_call()
+    servoPIN = 12
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(servoPIN, GPIO.OUT)
 
-def Open_Gripper():	
-    log_call()
+    p = GPIO.PWM(servoPIN, 50) # GPIO 17 for PWM with 50Hz
+    p.start(2.5) # Initialization
+    p.ChangeDutyCycle(5)
+    time.sleep(0.5)
+    p.ChangeDutyCycle(7.5)
+    time.sleep(0.5)
+    p.ChangeDutyCycle(10)
+    time.sleep(0.5)
+    p.ChangeDutyCycle(12.5)
+    time.sleep(0.5)
+    p.ChangeDutyCycle(10)
 
-def Gripper_Yaw_CW():	
-    log_call()
+    GPIO.cleanup()
 
-def Gripper_Yaw_CounterCW():	
+
+
+def End_Effector_Yaw():	
     log_call()
+    servoPIN = 20
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(servoPIN, GPIO.OUT)
+
+    p = GPIO.PWM(servoPIN, 50) # GPIO 17 for PWM with 50Hz
+    p.start(2.5) # Initialization
+    p.ChangeDutyCycle(5)
+    time.sleep(0.5)
+    p.ChangeDutyCycle(7.5)
+    time.sleep(0.5)
+    p.ChangeDutyCycle(10)
+    time.sleep(0.5)
+    p.ChangeDutyCycle(12.5)
+    time.sleep(0.5)
+    p.ChangeDutyCycle(10)
+
+    GPIO.cleanup()

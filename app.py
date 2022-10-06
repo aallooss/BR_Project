@@ -23,24 +23,30 @@ def HMI():
 		#names of these values are important as they coorespond to the button values on 'HMI.html'
 		if request.form['submit_button'] == 'Auto Run':
 			move.Auto_Run()
+
 		elif request.form['submit_button'] == 'Emergency Stop':
 			move.Emergency_Stop()
+
 		elif request.form['submit_button'] == 'Feed Hold':
 			move.feed_Hold()		
+
 		elif request.form['submit_button'] == 'Calibrate':
 			move.Calibrate()	
+
 		elif request.form['submit_button'] == 'Jog Z+':
-			move.Jog_Z_positive()	
+			move.Jog_Z(3000,1)	
 		elif request.form['submit_button'] == 'Jog Z-':
-			move.Jog_Z_negative()	
+			move.Jog_Z(3000,0)	
+
 		elif request.form['submit_button'] == 'Close Gripper':
-			move.Close_Gripper()	
-		elif request.form['submit_button'] == 'Open_Gripper':
-			move.Open_Gripper()	
-		elif request.form['submit_button'] == 'Gripper_Yaw_CW':
-			move.Gripper_Yaw_CW()	
-		elif request.form['submit_button'] == 'Gripper_Yaw_CounterCW':
-			move.Gripper_Yaw_CounterCW()	
+			move.Gripper()	
+		elif request.form['submit_button'] == 'Open gitGripper':
+			move.Gripper()	
+
+		elif request.form['submit_button'] == 'Gripper Yaw CW':
+			move.End_Effector_Yaw()	
+		elif request.form['submit_button'] == 'Gripper Yaw CCW':
+			move.End_Effector_Yaw()
 		else:
 			pass
 
