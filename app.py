@@ -29,9 +29,9 @@ def HMI():
 			move.feed_Hold()		
 		elif request.form['submit_button'] == 'Calibrate':
 			move.Calibrate()	
-		elif request.form['submit_button'] == 'Jog_Z_positive':
+		elif request.form['submit_button'] == 'Jog Z+':
 			move.Jog_Z_positive()	
-		elif request.form['submit_button'] == 'Jog_Z_negative':
+		elif request.form['submit_button'] == 'Jog Z-':
 			move.Jog_Z_negative()	
 		elif request.form['submit_button'] == 'Close Gripper':
 			move.Close_Gripper()	
