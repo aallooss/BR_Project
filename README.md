@@ -81,4 +81,44 @@ This is the core off the site. It routes all the pages and connects the front en
 
 Here contains all the movements to the GPIO pins
 
+# API
+For PLC usage there are a collection of endpoints. There are three base movement functions:
+No parameter
+Two parameter
+Three paramer
 
+The no parameter can be requested as such
+
+<robot_ip>:5000/PLC_API?command="comand here"
+
+The available commands are the following:
+auto_run
+emergency_stop
+feedhold
+calibrate
+
+
+
+The one parameter can be requested as such
+
+<robot_ip>:5000/PLC_API_1?move_command="move command here"&command="direction command"
+
+The available move commands with there respective direction commands are the following:
+gripper        open | close
+end_effector_yaw clockwise | counterclockwise
+
+
+
+The two parameter can be requested as such
+
+<robot_ip>:5000/PLC_API_2?command1="command 1"&command2="command2"
+
+This endpoint only calls one function but takes integers as parameter unlike the previous. It always calls the Z Jog command and takes command1 as steps and command2 and direction.
+
+command1:
+0-~10000            // 3000 is around one inch of travel
+command2:
+0 = CW
+1 = CCW
+
+All of the following endpoints return an html page with the inputted parameters
