@@ -15,7 +15,7 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
 
 
 
-    def battery(self, battery_value):
+    def get_battery_subcription(self, battery_value):
         if battery_value == True:
             battery_dict = { 'Battery Percent'  :  os.system(' echo "get battery" | nc -q 0 127.0.0.1 8423 '),
                              'Battery Current'  :  os.system(' echo "get battery_i" | nc -q 0 127.0.0.1 8423 '),
@@ -25,6 +25,7 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
             battery_dict = {'Battery Subscritption' : 'Unsubscribed'}
         else:
             battery_dict = {'Battery Subscrption'   : 'ERROR'}
+        return battery_dict
 
     def handle(self):
         # self.request - TCP socket connected to the client
@@ -60,7 +61,7 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
         else:
             print("ERROR: Invalid command")
         print(command_loaded)
-        print(battery(battery_param))
+        print(get_battery_subscription(battery_param))
         # just send back ACK for data arrival confirmation
         self.request.sendall("ACK from TCP Server".encode())
 
