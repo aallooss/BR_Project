@@ -81,44 +81,64 @@ This is the core off the site. It routes all the pages and connects the front en
 
 Here contains all the movements to the GPIO pins
 
-# API
-For PLC usage there are a collection of endpoints. There are three base movement functions:
-No parameter
-Two parameter
-Three paramer
+# REST API
 
+All of the following endpoints return a json dictionary page with the inputted parameters.
+
+For PLC usage there are a collection of endpoints. There are three base movement functions:
+* No parameter
+* Two parameter
+* Three paramer
+ 
 The no parameter can be requested as such
 
-<robot_ip>:5000/PLC_API?command="comand here"
+## No paramter
+
+> <robot_ip>:5000/api/no_parameter?move_command="move command"
 
 The available commands are the following:
-auto_run
-emergency_stop
-feedhold
-calibrate
+* auto_run
+* emergency_stop
+* feedhold
+* calibrate
 
+## One parameter
 
-
-The one parameter can be requested as such
-
-<robot_ip>:5000/PLC_API_1?move_command="move command here"&command="direction command"
+> <robot_ip>:5000/api/one_parameter?move_command="move command"&parameter="direction command"
 
 The available move commands with there respective direction commands are the following:
-gripper        open | close
-end_effector_yaw clockwise | counterclockwise
+* gripper: &nbsp;&nbsp; open | close
+* end_effector_yaw: &nbsp;&nbsp; clockwise | counterclockwise
 
+## Two parameter can be requested as such
 
-
-The two parameter can be requested as such
-
-<robot_ip>:5000/PLC_API_2?command1="command 1"&command2="command2"
+> <robot_ip>:5000/api/two_parameter?parameter_one="command 1"&parameter_two="command2"
 
 This endpoint only calls one function but takes integers as parameter unlike the previous. It always calls the Z Jog command and takes command1 as steps and command2 and direction.
 
-command1:
-0-~10000            // 3000 is around one inch of travel
-command2:
-0 = CW
-1 = CCW
+* command1:&nbsp;&nbsp;0-~10000            // 3000 is around one inch of travel
+* command2:&nbsp;&nbsp;0 = CW, &nbsp;&nbsp;1 = CCW
 
-All of the following endpoints return an html page with the inputted parameters
+## Battery Enpdpoint
+
+In progress
+
+# TCP Socket
+
+The TCP Socket provides a little more flexability. The server accepts a JSON as input, the most basic data is below and a helpful table can be found below.
+'''json
+data = {'Move_Commmand'     : 'Auto_Run',
+        'Parameter_One'     : None,
+        'Parameter_Two'     : None,
+        'Battery_Param'     : None} 
+'''
+
+| Move_Command | Parameter_One | Paramter_Two | Battery Param |
+| :---: | :---: | :---: | :---: | :---: |
+| Auto_Run | None | None | true/false |
+| Emergency_Stop | None | None | true/false |
+| Feed_Hold | None | None | true/false |
+| Calibrate | None | None | true/false |
+| Jog_Z | 1-10000 (steps) | 0/1 (direction) | true/false |
+| Gripper | close/open | None | true/false |
+| Gripper_Yaw | CW/CCW | None | true/false |

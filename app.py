@@ -1,4 +1,6 @@
-from flask import Flask, escape, render_template, request, url_for
+import json
+from flask import Flask, escape, render_template, request, url_for, jsonify
+
 
 #contains movement commands to GPIO
 import move
@@ -20,9 +22,9 @@ def about():
 
 
 # no parameter endpoints
-@application.route('/PLC_API')
+@application.route('/api/no_parameter')
 def access_param():
-	source = request.args.get('command')
+	move_command = request.args.get('move_command')
 	if source == 'auto_run':
 		move.Auto_Run()
 	elif source == 'emergency_stop':
@@ -32,32 +34,49 @@ def access_param():
 	elif source == 'calibrate':
 		move.Calibrate()
 	else:
-		return '''<h1>Error please double check your endpoint</h1>'''
-	return '''<h1>The source value is: {}</h1>'''.format(source)
+		return jsonify({'ERROR': 'invalid parameter'})
+	return jsonify({'Move Command':source,
+					'Battery'     :battery.get_battery_life()})
 
 # one parameter endpoints
-@application.route('/PLC_API_1')
+@application.route('/api/one_parameter')
 def one_param_access_param():
 	move_command = request.args.get('move_command')
-	command = request.args.get('command')
+	parameter = request.args.get('parameter')
 	if move_command == 'gripper':
-		move.gripper(command)		# direction
+		move.gripper(parameter)		# direction
 	elif move_command == 'end_effector_yaw':
-		move.End_Effector_Yaw(command)
+		move.End_Effector_Yaw(parameter)
 	else:
-		return '''<h1>Error please double check your endpoint</h1>'''
-	return '''<h1>The source value is: {}</h1>'''.format(command)
+		return jsonify({'ERROR': 'invalid parameter'})
+	return jsonify({'Move Command':source,
+					'Direction'   :command,
+					'Battery'     :battery.get_battery_life()})
 
 
 # two parameter endpoints
-@application.route('/PLC_API_2')
+@application.route('/api/two_parameter')
 def two_param_access_param():
-	command1 = request.args.get('command1')
-	command2 = request.args.get('command2')
-	move.Jog_Z(command1, command2)		#steps, direction
-	return '''<h1>The source values are : {}, {}<h1>'''.format(command1, command2)
+	parameter_one = request.args.get('parameter_one')
+	parameter_two = request.args.get('parameter_two')
+	move.Jog_Z(paramter_one, paramter_two)		#steps, direction
+	return jsonify({'Move Command':'Jog Z',
+					'Steps'       :parameter_one,
+					'Direction'   :parameter_two,
+					'Battery'     :battery.get_battery_life()})
 
-
+# get only battery info
+@application.route('/battery_info')
+def two_param_access_param():
+	return jsonify({'Percent'			:'Percent',
+					'Current'       	:'Current',
+					'Voltage'   		:'Voltage',
+					'Charging status'   :'Charging status',
+					'battery range'		:'range',
+					'get battery shell'	:'battery shell',
+					'shutdown level'    :'level',
+					'shutdown delay'	:'delay',
+					'chip temp'			:'temp'})
 
 #HMI page routing
 @application.route('/HMI', methods=["POST","GET"])
@@ -71,7 +90,7 @@ def HMI():
 			move.Emergency_Stop()
 
 		elif request.form['submit_button'] == 'Feed Hold':
-			move.feed_Hold()		
+			move.Feed_Hold()		
 
 		elif request.form['submit_button'] == 'Calibrate':
 			move.Calibrate()	

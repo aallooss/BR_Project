@@ -32,7 +32,7 @@ def Auto_Run():
 def Emergency_Stop():
     log_call()
     
-def feed_Hold():		
+def Feed_Hold():		
     log_call()
     
 def Calibrate():
