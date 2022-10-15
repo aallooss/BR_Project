@@ -1,7 +1,7 @@
 import socketserver
 import move
 import battery
-import re
+import os
 import json
 
 class Handler_TCPServer(socketserver.BaseRequestHandler):
@@ -13,6 +13,19 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
 
     """
 
+
+
+    def battery(self, battery_value):
+        if battery_value == True:
+            battery_dict = { 'Battery Percent'  :  os.system(' echo "get battery" | nc -q 0 127.0.0.1 8423 '),
+                             'Battery Current'  :  os.system(' echo "get battery_i" | nc -q 0 127.0.0.1 8423 '),
+                             'Battery Voltage'  :  os.system(' echo "get battery_v" | nc -q 0 127.0.0.1 8423 '),
+                             'Battery Charging' :  os.system(' echo "get battery_charging" | nc -q 0 127.0.0.1 8423 ')}
+        elif battery_value == False: 
+            battery_dict = {'Battery Subscritption' : 'Unsubscribed'}
+        else:
+            battery_dict = {'Battery Subscrption'   : 'ERROR'}
+
     def handle(self):
         # self.request - TCP socket connected to the client
         command = self.request.recv(1024).strip().decode('utf-8')
@@ -22,6 +35,7 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
         move_command = list(command_loaded.values())[0]
         parameter_one = list(command_loaded.values())[1]
         parameter_two = list(command_loaded.values())[2]
+        battery_param = list(command_loaded.value())[3]
 
         if move_command == 'Auto_Run':
             move.Auto_Run()
@@ -46,7 +60,7 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
         else:
             print("ERROR: Invalid command")
         print(command_loaded)
-
+        print(battery(battery_param))
         # just send back ACK for data arrival confirmation
         self.request.sendall("ACK from TCP Server".encode())
 

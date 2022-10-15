@@ -1,5 +1,6 @@
 # Mechatronics Senior Design Project
-## Kennesaw State University X B&R Automation 
+
+## Kennesaw State University X B&R Automation
 
 ## How to start
 
@@ -11,27 +12,32 @@ $ cd BR_Project
 $ git clone https://github.com/aallooss/BR_Project.git
 ```
 
-
 ## Requirements
 
 If you never worked with python projects then the simplest way is run project inside a virtual environment.
 
 If you familiar with web development then you need Python, Flask and other dependencies.
 Please follow the tutorial below to set up your evironment and com back when complete if not already installed.
+
 - Working [`virtualenv`](https://python.land/virtual-environments/virtualenv) command
 
 Welcome back.
 
 Install the required dependencies in your cirtual environment using the command below:
+
 ```sh
 pip install -r requirements.txt
 ```
+
 ## Windows
+
 note: must be using Comment Prompt, not Powershell.
+
 ```sh
 C:\Users\user\BR_Project> set FLASK_APP=app.py
 C:\Users\user\BR_Project> flask run
 ```
+
 ## GNU/Linux
 
 ```sh
@@ -61,7 +67,6 @@ After you check out this code you may need to rename folder `BR_Project` to some
 
 Your Project file should look something like this.
 
-
     ├───Scripts         # should be generated when you create your virtual environment
     ├───static          # static files self
     │   ├───assets      # here are the jpg, png etc. files
@@ -71,11 +76,12 @@ Your Project file should look something like this.
     └───__pycache__     # created by python dont touch
 
 # MISC
+
 ## Majority of the writing of code will be done in the files below:
 
-    app.py 
+    app.py
 
-This is the core off the site. It routes all the pages and connects the front end to the backend. 
+This is the core off the site. It routes all the pages and connects the front end to the backend.
 
     move.py
 
@@ -86,10 +92,11 @@ Here contains all the movements to the GPIO pins
 All of the following endpoints return a json dictionary page with the inputted parameters.
 
 For PLC usage there are a collection of endpoints. There are three base movement functions:
+
 * No parameter
 * Two parameter
 * Three paramer
- 
+
 The no parameter can be requested as such
 
 ## No paramter
@@ -97,6 +104,7 @@ The no parameter can be requested as such
 > <robot_ip>:5000/api/no_parameter?move_command="move command"
 
 The available commands are the following:
+
 * auto_run
 * emergency_stop
 * feedhold
@@ -107,6 +115,7 @@ The available commands are the following:
 > <robot_ip>:5000/api/one_parameter?move_command="move command"&parameter="direction command"
 
 The available move commands with there respective direction commands are the following:
+
 * gripper: &nbsp;&nbsp; open | close
 * end_effector_yaw: &nbsp;&nbsp; clockwise | counterclockwise
 
@@ -119,26 +128,23 @@ This endpoint only calls one function but takes integers as parameter unlike the
 * command1:&nbsp;&nbsp;0-~10000            // 3000 is around one inch of travel
 * command2:&nbsp;&nbsp;0 = CW, &nbsp;&nbsp;1 = CCW
 
-## Battery Enpdpoint
-
-In progress
-
 # TCP Socket
 
 The TCP Socket provides a little more flexability. The server accepts a JSON as input, the most basic data is below and a helpful table can be found below.
 '''json
 data = {'Move_Commmand'     : 'Auto_Run',
-        'Parameter_One'     : None,
-        'Parameter_Two'     : None,
-        'Battery_Param'     : None} 
+        'Parameter_One'                : None,
+        'Parameter_Two'                 : None,
+        'Battery_Subscribe'            : None}
 '''
 
-| Move_Command | Parameter_One | Paramter_Two | Battery Param |
-| :---: | :---: | :---: | :---: | :---: |
-| Auto_Run | None | None | true/false |
-| Emergency_Stop | None | None | true/false |
-| Feed_Hold | None | None | true/false |
-| Calibrate | None | None | true/false |
-| Jog_Z | 1-10000 (steps) | 0/1 (direction) | true/false |
-| Gripper | close/open | None | true/false |
-| Gripper_Yaw | CW/CCW | None | true/false |
+
+|  Move_Command  |  Parameter_One  |  Paramter_Two  | Battery Subscribe |  |
+| :------------: | :-------------: | :-------------: | :---------------: | :-: |
+|    Auto_Run    |      None      |      None      |    True/False    |  |
+| Emergency_Stop |      None      |      None      |    True/False    |  |
+|   Feed_Hold   |      None      |      None      |    True/False    |  |
+|   Calibrate   |      None      |      None      |    True/False    |  |
+|     Jog_Z     | 1-10000 (steps) | 0/1 (direction) |    True/False    |  |
+|    Gripper    |   close/open   |      None      |    True/False    |  |
+|  Gripper_Yaw  |     CW/CCW     |      None      |    True/False    |  |
