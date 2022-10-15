@@ -2,6 +2,7 @@ import socketserver
 import move
 import os
 import json
+import subprocess
 
 class Handler_TCPServer(socketserver.BaseRequestHandler):
     """
@@ -14,10 +15,15 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
 
     def battery(self, battery_value):
         if battery_value == True:
-            battery_dict = { 'Battery Percent'  :  os.system(' echo "get battery" | nc -q 0 127.0.0.1 8423 '),
-                             'Battery Current'  :  os.system(' echo "get battery_i" | nc -q 0 127.0.0.1 8423 '),
-                             'Battery Voltage'  :  os.system(' echo "get battery_v" | nc -q 0 127.0.0.1 8423 '),
-                             'Battery Charging' :  os.system(' echo "get battery_charging" | nc -q 0 127.0.0.1 8423 ')}
+            percent = subprocess.check_output('echo "get battery" | nc -q 0 127.0.0.1 8423', shell=True)
+            current = subprocess.check_output('echo "get battery_i" | nc -q 0 127.0.0.1 8423', shell=True)
+            voltage = subprocess.check_output('echo "get battery_v" | nc -q 0 127.0.0.1 8423', shell=True)
+            charging = subprocess.check_output('echo "get battery_charging" | nc -q 0 127.0.0.1 8423', shell=True)
+            battery_dict = { 'Battery Subscription' : True,
+                                               '0'  :  percent.decode(),
+                                               '1'  :  current.decode(),
+                                               '2'  :  voltage.decode(),
+                                               '3'  :  charging.decode()}
         elif battery_value == False: 
             battery_dict = {'Battery Subscritption' : 'Unsubscribed'}
         else:
@@ -58,8 +64,9 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
             print("ERROR: Invalid command")
         print(command_loaded)
         print(self.battery(battery_param))
+        message = str(self.battery(battery_param))
         # just send back ACK for data arrival confirmation
-        self.request.sendall("ACK from TCP Server".encode())
+        self.request.sendall(message.encode())
 
 
 
