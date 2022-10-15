@@ -1,6 +1,5 @@
 import socketserver
 import move
-import battery
 import os
 import json
 
@@ -13,9 +12,7 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
 
     """
 
-
-
-    def get_battery_subcription(self, battery_value):
+    def battery(self, battery_value):
         if battery_value == True:
             battery_dict = { 'Battery Percent'  :  os.system(' echo "get battery" | nc -q 0 127.0.0.1 8423 '),
                              'Battery Current'  :  os.system(' echo "get battery_i" | nc -q 0 127.0.0.1 8423 '),
@@ -32,11 +29,10 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
         command = self.request.recv(1024).strip().decode('utf-8')
         command_loaded = json.loads(command) #data loaded
 
-
         move_command = list(command_loaded.values())[0]
         parameter_one = list(command_loaded.values())[1]
         parameter_two = list(command_loaded.values())[2]
-        battery_param = list(command_loaded.value())[3]
+        battery_param = list(command_loaded.values())[3]
 
         if move_command == 'Auto_Run':
             move.Auto_Run()
@@ -61,7 +57,7 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
         else:
             print("ERROR: Invalid command")
         print(command_loaded)
-        print(get_battery_subscription(battery_param))
+        print(self.battery(battery_param))
         # just send back ACK for data arrival confirmation
         self.request.sendall("ACK from TCP Server".encode())
 
@@ -70,7 +66,7 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
 
 #  IP and PORT configuration is to be set up here
 if __name__ == "__main__":
-    HOST, PORT = "localhost", 9999
+    HOST, PORT = "172.20.10.5", 9999
 
     # Init the TCP server object, bind it to the chosen HOST and PORT
     tcp_server = socketserver.TCPServer((HOST, PORT), Handler_TCPServer)
