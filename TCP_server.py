@@ -81,3 +81,14 @@ if __name__ == "__main__":
     # Activate the TCP server.
     # To abort the TCP server, press Ctrl-C.
     tcp_server.serve_forever()
+
+#webcalable function, used for HMI button
+def web_callable():
+    HOST, PORT = "172.20.10.5", 9999
+
+    # Init the TCP server object, bind it to the chosen HOST and PORT
+    tcp_server = socketserver.TCPServer((HOST, PORT), Handler_TCPServer)
+
+    # Activate the TCP server.
+    # To abort the TCP server, press Ctrl-C.
+    tcp_server.serve_forever()
