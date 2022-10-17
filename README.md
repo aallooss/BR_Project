@@ -138,10 +138,11 @@ This endpoint only calls one function but takes integers as parameter unlike the
 
 There is no customizable paramters for this endpoint, it will return the following JSON:
 ```json
-data = {'Battery Percent'  :  float),
-        'Battery Current'  :  float),
-        'Battery Voltage'  :  float),
-        'Battery Charging' :  float)}
+data = {'Battery Percent'  :  float,
+        'Battery Current'  :  float,
+        'Battery Voltage'  :  float,
+        'Battery Charging' :  float
+        }
    
 ```
 
