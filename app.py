@@ -1,6 +1,7 @@
 #import json
 from flask import Flask, escape, render_template, request, url_for, jsonify
 
+import TCP_server
 
 #contains movement commands to GPIO
 import move
@@ -108,6 +109,8 @@ def HMI():
 			move.End_Effector_Yaw()	
 		elif request.form['submit_button'] == 'Gripper Yaw CCW':
 			move.End_Effector_Yaw()
+		elif request.form['submit_button'] == 'TCP ON':
+			TCP_server.web_callable()
 		else:
 			pass
 		

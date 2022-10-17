@@ -1,8 +1,8 @@
 import socketserver
 import move
-import battery
 import os
 import json
+import subprocess
 import battery
 
 class Handler_TCPServer(socketserver.BaseRequestHandler):
@@ -19,11 +19,10 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
         command = self.request.recv(1024).strip().decode('utf-8')
         command_loaded = json.loads(command) #data loaded
 
-
         move_command = list(command_loaded.values())[0]
         parameter_one = list(command_loaded.values())[1]
         parameter_two = list(command_loaded.values())[2]
-        battery_param = list(command_loaded.value())[3]
+        battery_param = list(command_loaded.values())[3]
 
         if move_command == 'Auto_Run':
             move.Auto_Run()
@@ -48,16 +47,28 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
         else:
             print("ERROR: Invalid command")
         print(command_loaded)
-        print(battery.get_battery_subscription(battery_param))
+        print(self.get_battery_subcription(battery_param))
+        message = str(self.get_battery_subcription(battery_param))
         # just send back ACK for data arrival confirmation
-        self.request.sendall("ACK from TCP Server".encode())
+        self.request.sendall(message.encode())
 
 
 
 
 #  IP and PORT configuration is to be set up here
 if __name__ == "__main__":
-    HOST, PORT = "localhost", 9999
+    HOST, PORT = "172.20.10.5", 9999
+
+    # Init the TCP server object, bind it to the chosen HOST and PORT
+    tcp_server = socketserver.TCPServer((HOST, PORT), Handler_TCPServer)
+
+    # Activate the TCP server.
+    # To abort the TCP server, press Ctrl-C.
+    tcp_server.serve_forever()
+
+#webcalable function, used for HMI button
+def web_callable():
+    HOST, PORT = "172.20.10.5", 9999
 
     # Init the TCP server object, bind it to the chosen HOST and PORT
     tcp_server = socketserver.TCPServer((HOST, PORT), Handler_TCPServer)
