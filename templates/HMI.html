@@ -3,7 +3,7 @@
     <body>
         <!-- HMI Buttons-->
         <section class="border-bottom py-3">
-            <div class="container">
+            <div class="container text-center">
                 <form action="#" method="post">
                     <input type="submit" class="btn btn-primary btn-lrg" name="submit_button" value="Auto Run">
                     <input type="submit" class="btn btn-danger btn-lrg" name="submit_button" value="Emergency Stop">
@@ -16,6 +16,11 @@
                     <input type="submit" class="btn btn-secondary btn-lrg" name="submit_button" value="Gripper Yaw CW">
                     <input type="submit" class="btn btn-secondary btn-lrg" name="submit_button" value="Gripper Yaw CCW">
                 </form>
+            </div>
+        </section>
+        <section class="border-bottom py-3">
+            <div class="container py-3 my-3 text-center w-40">
+                    <img src="{{ url_for('static', filename='assets/v6.jpg')}}" class="w-40 border rounded" />
             </div>
         </section>
     </body>
