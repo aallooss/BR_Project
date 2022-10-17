@@ -96,12 +96,13 @@ For PLC usage there are a collection of endpoints. There are three base movement
 * No parameter
 * Two parameter
 * Three paramer
+* battery:&nbsp;&nbsp;True | False
 
 The no parameter can be requested as such
 
 ## No paramter
 
-> <robot_ip>:5000/api/no_parameter?move_command="move command"
+> <robot_ip>:5000/api/no_parameter?move_command="move command"&battery="True/False"
 
 The available commands are the following:
 
@@ -109,42 +110,57 @@ The available commands are the following:
 * emergency_stop
 * feedhold
 * calibrate
+* battery:&nbsp;&nbsp;True | False
 
 ## One parameter
 
-> <robot_ip>:5000/api/one_parameter?move_command="move command"&parameter="direction command"
+> <robot_ip>:5000/api/one_parameter?move_command="move command"&parameter="direction command"&battery="True/False"
 
 The available move commands with there respective direction commands are the following:
 
 * gripper: &nbsp;&nbsp; open | close
 * end_effector_yaw: &nbsp;&nbsp; clockwise | counterclockwise
+* battery:&nbsp;&nbsp;True | False
 
-## Two parameter can be requested as such
+## Two parameter
 
-> <robot_ip>:5000/api/two_parameter?parameter_one="command 1"&parameter_two="command2"
+> <robot_ip>:5000/api/two_parameter?parameter_one="command 1"&parameter_two="command2"&battery="True/False"
 
 This endpoint only calls one function but takes integers as parameter unlike the previous. It always calls the Z Jog command and takes command1 as steps and command2 and direction.
 
 * command1:&nbsp;&nbsp;0-~10000            // 3000 is around one inch of travel
 * command2:&nbsp;&nbsp;0 = CW, &nbsp;&nbsp;1 = CCW
+* battery:&nbsp;&nbsp;True | False
+
+## Battery Only
+
+> <robot_ip>:5000/api/battery_info
+
+There is no customizable paramters for this endpoint, it will return the following JSON:
+```json
+data = {'Battery Percent'  :  float),
+        'Battery Current'  :  float),
+        'Battery Voltage'  :  float),
+        'Battery Charging' :  float)}
+   
+```
 
 # TCP Socket
 
 The TCP Socket provides a little more flexability. The server accepts a JSON as input, the most basic data is below and a helpful table can be found below.
-'''json
+```json
 data = {'Move_Commmand'     : 'Auto_Run',
         'Parameter_One'                : None,
         'Parameter_Two'                 : None,
         'Battery_Subscribe'            : None}
-'''
+```
 
-
-|  Move_Command  |  Parameter_One  |  Paramter_Two  | Battery Subscribe |  |
-| :------------: | :-------------: | :-------------: | :---------------: | :-: |
-|    Auto_Run    |      None      |      None      |    True/False    |  |
-| Emergency_Stop |      None      |      None      |    True/False    |  |
-|   Feed_Hold   |      None      |      None      |    True/False    |  |
-|   Calibrate   |      None      |      None      |    True/False    |  |
-|     Jog_Z     | 1-10000 (steps) | 0/1 (direction) |    True/False    |  |
-|    Gripper    |   close/open   |      None      |    True/False    |  |
-|  Gripper_Yaw  |     CW/CCW     |      None      |    True/False    |  |
+|  Move_Command  |  Parameter_One  |  Paramter_Two  | Battery Subscribe |
+| :------------: | :-------------: | :-------------: | :---------------: |
+|    Auto_Run    |      None      |      None      |    True/False    |
+| Emergency_Stop |      None      |      None      |    True/False    |
+|   Feed_Hold   |      None      |      None      |    True/False    |
+|   Calibrate   |      None      |      None      |    True/False    |
+|     Jog_Z     | 1-10000 (steps) | 0/1 (direction) |    True/False    |
+|    Gripper    |   close/open   |      None      |    True/False    |
+|  Gripper_Yaw  |     CW/CCW     |      None      |    True/False    |
