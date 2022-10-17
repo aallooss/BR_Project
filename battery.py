@@ -1,3 +1,5 @@
+import subprocess
+
 def get_battery_subcription(battery_value):
     if battery_value == True:
         percent = subprocess.check_output('echo "get battery" | nc -q 0 127.0.0.1 8423', shell=True)

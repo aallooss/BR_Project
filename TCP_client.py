@@ -1,13 +1,12 @@
 import socket
 import json
 
-host_ip, server_port = "127.0.0.1", 9999
-data = {'Move_Commmand'     : 'Auto_Run',
-        'Parameter_One'     : 'adf',            # None value if not needed
-        'Parameter_Two'     : 'asdfadsf',       # None value if not needed
-        'Battery_Param'     : 'adfadf0'}        # battery api in progress
-
-data_string = json.dumps(data) #data serialized
+host_ip, server_port = "172.20.10.5", 9999
+data = {'Move_Commmand'     : 'Jog_Z',
+        'Parameter_One'     : 3000,         # None value if not needed
+        'Parameter_Two'     : 0,            # None value if not needed
+        'Battery_Subscribe'     : 0}        # battery api True/False to subscribe or unsubscribe
+data_string = json.dumps(data)              # data serialized
 
 # Initialize a TCP client socket using SOCK_STREAM
 tcp_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -22,5 +21,5 @@ try:
 finally:
     tcp_client.close()
 
-print ("Move Command Sent:      {}".format(data_string[1]))
+print ("Move Command Sent:      {}".format(data))
 print ("Bytes Received:         {}".format(received.decode()))
