@@ -139,12 +139,12 @@ data = {'Move_Commmand'     : 'Auto_Run',
 '''
 
 
-|  Move_Command  |  Parameter_One  |  Paramter_Two  | Battery Subscribe |  |
-| :------------: | :-------------: | :-------------: | :---------------: | :-: |
-|    Auto_Run    |      None      |      None      |    True/False    |  |
-| Emergency_Stop |      None      |      None      |    True/False    |  |
-|   Feed_Hold   |      None      |      None      |    True/False    |  |
-|   Calibrate   |      None      |      None      |    True/False    |  |
-|     Jog_Z     | 1-10000 (steps) | 0/1 (direction) |    True/False    |  |
-|    Gripper    |   close/open   |      None      |    True/False    |  |
-|  Gripper_Yaw  |     CW/CCW     |      None      |    True/False    |  |
+|  Move_Command  |  Parameter_One  |  Paramter_Two  | Battery Subscribe |
+| :------------: | :-------------: | :-------------: | :---------------: |
+|    Auto_Run    |      None      |      None      |    True/False    |
+| Emergency_Stop |      None      |      None      |    True/False    |
+|   Feed_Hold   |      None      |      None      |    True/False    |
+|   Calibrate   |      None      |      None      |    True/False    |
+|     Jog_Z     | 1-10000 (steps) | 0/1 (direction) |    True/False    |
+|    Gripper    |   close/open   |      None      |    True/False    |
+|  Gripper_Yaw  |     CW/CCW     |      None      |    True/False    |
