@@ -131,14 +131,14 @@ This endpoint only calls one function but takes integers as parameter unlike the
 # TCP Socket
 
 The TCP Socket provides a little more flexability. The server accepts a JSON as input, the most basic data is below and a helpful table can be found below.
-'''json
-{
+```json
+data = {
         'Move_Commmand'         : 'Auto_Run',
         'Parameter_One'         : None,
         'Parameter_Two'         : None,
         'Battery_Subscribe'     : None
-}
-'''
+        }
+```
 
 
 |  Move_Command  |  Parameter_One  |  Paramter_Two  | Battery Subscribe |
