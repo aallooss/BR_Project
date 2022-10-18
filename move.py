@@ -1,5 +1,6 @@
 import inspect
 import time
+import subprocess
 import RPi.GPIO as GPIO
 from time import sleep
 from gpiozero import AngularServo
@@ -14,11 +15,6 @@ STEP = 8
 CW = 1
 CCW = 0
 
-
-
-
-
-
 #when function is called, the name of the function inside is printed, helpful for debugging and... logging
 def log_call():
     print(inspect.stack()[1][3])
@@ -30,6 +26,7 @@ def Auto_Run():
     log_call()
     
 def Emergency_Stop():
+    subprocess.check_output('sudo shutdown now', shell=True) #shuts Pi down immediantly 
     log_call()
     
 def Feed_Hold():		
