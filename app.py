@@ -102,7 +102,7 @@ def HMI():
 
 		elif request.form['submit_button'] == 'Close Gripper':
 			move.Gripper('close')
-		elif request.form['submit_button'] == 'Open gitGripper':
+		elif request.form['submit_button'] == 'Open Gripper':
 			move.Gripper('open')
 
 		elif request.form['submit_button'] == 'Gripper Yaw CW':
