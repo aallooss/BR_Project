@@ -1,10 +1,13 @@
-import inspect import time
+import inspect
+import time
 import subprocess
 import json
 import RPi.GPIO as GPIO
 from time import sleep
 
 GPIO.setmode(GPIO.BOARD) #using physical pin numbers NOT "GPIOxx"
+
+timing = .000000001
 
 limit_pin = 11 # physical pin 11
 GPIO.setup(limit_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -35,12 +38,12 @@ def log_call():
 def Auto_Run():
     Calibrate()    # Always run calibrate
     Gripper('open')
-    Jog_Z(3000,0)
+    Jog_Z(4000,1)
     End_Effector_Yaw('CW')
     End_Effector_Yaw('CCW')
     Gripper('close')
     log_call()
-
+    
 def Emergency_Stop():
     subprocess.check_output('sudo shutdown now', shell=True) #shuts Pi down immediantly 
     log_call()
@@ -50,13 +53,19 @@ def Feed_Hold():
 
 def Calibrate():
     log_call()
-#    GPIO.setmode(GPIO.BOARD) # Set PHYSICAL
+    GPIO.output(DIR,0) # set direction downward
     while GPIO.input(limit_pin):
-        print('...Calibrating...')
-        Jog_Z(150,0)
-    Jog_Z(300,1)
-    print('...Finished...')
- #   GPIO.cleanup()
+        GPIO.output(STEP, GPIO.HIGH)
+        sleep(timing)
+        GPIO.output(STEP, GPIO.LOW)
+        sleep(timing)
+    GPIO.output(DIR,1)	# set direcion upward
+    for i in range(300):
+        GPIO.output(STEP, GPIO.HIGH)
+        sleep(timing)
+        GPIO.output(STEP, GPIO.LOW)
+        sleep(timing)
+    print("...Calibrated...")
 
 def Jog_Z(steps,direction):     # 0/1 used to signify clockwise or counterclockwise.
     log_call()
@@ -72,16 +81,20 @@ def Jog_Z(steps,direction):     # 0/1 used to signify clockwise or counterclockw
         # Set one coil winding to high
         GPIO.output(STEP,GPIO.HIGH)
         # Allow it to get there.
-        sleep(.00005) # Dictates how fast stepper motor will run
+        sleep(timing) # Dictates how fast stepper motor will run
         # Set coil winding to low
         GPIO.output(STEP,GPIO.LOW)
-        sleep(.00005) # Dictates how fast stepper motor will run
-#    GPIO.cleanup()
+        sleep(timing) # Dictates how fast stepper motor will run
+        if GPIO.input(limit_pin) == 0:
+            print('ERROR: limit reached')
+            Calibrate()
+            return
+    # GPIO.cleanup()
 
 def Gripper(direction):
     log_call()
 
-    p = GPIO.PWM(server_gripper, 50)
+    p = GPIO.PWM(servo_gripper, 50)
     p.start(0)
     if direction == "close":
         for  i in range(0,181):
@@ -120,4 +133,4 @@ def End_Effector_Yaw(direction):
     p.stop()
    # GPIO.cleanup()
 
-Calibrate()
+
