@@ -1,6 +1,7 @@
 #import json
 from flask import Flask, escape, render_template, request, url_for, jsonify
 
+# Here are the TCP Commands 
 import TCP_server
 
 #contains movement commands to GPIO
