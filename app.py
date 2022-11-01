@@ -1,6 +1,7 @@
 #import json
 from flask import Flask, escape, render_template, request, url_for, jsonify
 
+# Here are the TCP Commands 
 import TCP_server
 
 #contains movement commands to GPIO
@@ -50,7 +51,7 @@ def one_param_access_param():
 	parameter = request.args.get('parameter')
 	battery_command = request.args.get('battery')
 	if move_command == 'gripper':
-		move.gripper(parameter)		# direction
+		move.Gripper(parameter)		# direction
 	elif move_command == 'end_effector_yaw':
 		move.End_Effector_Yaw(parameter)
 	else:
@@ -90,30 +91,30 @@ def HMI():
 			move.Emergency_Stop()
 
 		elif request.form['submit_button'] == 'Feed Hold':
-			move.Feed_Hold()		
+			move.Feed_Hold()
 
 		elif request.form['submit_button'] == 'Calibrate':
-			move.Calibrate()	
+			move.Calibrate()
 
 		elif request.form['submit_button'] == 'Jog Z+':
-			move.Jog_Z(3000,1)	
+			move.Jog_Z(3000,1)
 		elif request.form['submit_button'] == 'Jog Z-':
-			move.Jog_Z(3000,0)	
+			move.Jog_Z(3000,0)
 
 		elif request.form['submit_button'] == 'Close Gripper':
-			move.Gripper()	
-		elif request.form['submit_button'] == 'Open gitGripper':
-			move.Gripper()	
+			move.Gripper('close')
+		elif request.form['submit_button'] == 'Open Gripper':
+			move.Gripper('open')
 
 		elif request.form['submit_button'] == 'Gripper Yaw CW':
-			move.End_Effector_Yaw()	
+			move.End_Effector_Yaw('CW')
 		elif request.form['submit_button'] == 'Gripper Yaw CCW':
-			move.End_Effector_Yaw()
+			move.End_Effector_Yaw('CCW')
 		elif request.form['submit_button'] == 'TCP ON':
 			TCP_server.web_callable()
 		else:
 			pass
-		
+
 		return render_template('HMI.html')
 	elif request.method == 'GET':
 		return render_template('HMI.html')

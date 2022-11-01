@@ -27,28 +27,28 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
         if move_command == 'Auto_Run':
             move.Auto_Run()
 
-        elif command == 'Emergency_Stop':
+        elif move_command == 'Emergency_Stop':
             move.Emergency_Stop()
 
         elif move_command == 'Feed_Hold':
-            move.Feed_Hold()		
+            move.Feed_Hold()
 
         elif move_command == 'Calibrate':
-            move.Calibrate()	
+            move.Calibrate()
 
         elif move_command == 'Jog_Z':
-            move.Jog_Z(parameter_one, parameter_two)	
+            move.Jog_Z(parameter_one, parameter_two)
 
         elif move_command == 'Gripper':
-            move.Gripper(parameter_one)	
+            move.Gripper(parameter_one)
 
         elif move_command == 'Gripper_Yaw':
-            move.End_Effector_Yaw(parameter_one)	
+            move.End_Effector_Yaw(parameter_one)
         else:
             print("ERROR: Invalid command")
         print(command_loaded)
-        print(self.get_battery_subcription(battery_param))
-        message = str(self.get_battery_subcription(battery_param))
+        print(battery.get_battery_subscription(battery_param))
+        message = str(battery.get_battery_subscription(battery_param))
         # just send back ACK for data arrival confirmation
         self.request.sendall(message.encode())
 
@@ -64,6 +64,7 @@ if __name__ == "__main__":
 
     # Activate the TCP server.
     # To abort the TCP server, press Ctrl-C.
+    print("TCP server active")
     tcp_server.serve_forever()
 
 #webcalable function, used for HMI button
