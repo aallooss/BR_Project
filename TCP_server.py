@@ -17,13 +17,18 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
     def handle(self):
         # self.request - TCP socket connected to the client
         command = self.request.recv(1024).strip().decode('utf-8')
+        print(command)
         command_loaded = json.loads(command) #data loaded
 
+        print(command_loaded)
+        command_loaded = list(command_loaded.values())[0]
+        print(command_loaded)
         move_command = list(command_loaded.values())[0]
         parameter_one = list(command_loaded.values())[1]
         parameter_two = list(command_loaded.values())[2]
         battery_param = list(command_loaded.values())[3]
-
+        print(move_command)
+        
         if move_command == 'Auto_Run':
             move.Auto_Run()
 
@@ -57,7 +62,7 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
 
 #  IP and PORT configuration is to be set up here
 if __name__ == "__main__":
-    HOST, PORT = "172.20.10.5", 9999
+    HOST, PORT = "192.168.0.102", 9999
 
     # Init the TCP server object, bind it to the chosen HOST and PORT
     tcp_server = socketserver.TCPServer((HOST, PORT), Handler_TCPServer)
@@ -69,7 +74,7 @@ if __name__ == "__main__":
 
 #webcalable function, used for HMI button
 def web_callable():
-    HOST, PORT = "172.20.10.5", 9999
+    HOST, PORT = "192.168.0.102", 9999
 
     # Init the TCP server object, bind it to the chosen HOST and PORT
     tcp_server = socketserver.TCPServer((HOST, PORT), Handler_TCPServer)

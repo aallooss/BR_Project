@@ -9,7 +9,7 @@ import time
 
 #current_time = time.strftime("%H:%M:%S", t)
 
-filename = "test1.csv"
+filename = "test2.csv"
 columns = ['time', 'percent','current','voltage','cycle']
 
 cycle = 0
