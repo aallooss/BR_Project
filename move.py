@@ -45,7 +45,7 @@ def Auto_Run():
     log_call()
     
 def Emergency_Stop():
-    subprocess.check_output('sudo shutdown now', shell=True) #shuts Pi down immediantly 
+    subprocess.check_output('sudo reboot', shell=True) #shuts Pi down immediantly 
     log_call()
 
 def Feed_Hold():
