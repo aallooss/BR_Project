@@ -4,7 +4,6 @@ import os
 import json
 import subprocess
 import battery
-import TCP_clientX20
 
 class Handler_TCPServer(socketserver.BaseRequestHandler):
     """
@@ -29,14 +28,10 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
         parameter_two = list(command_loaded.values())[2]
         battery_param = list(command_loaded.values())[3]
         print(move_command)
-        message = str(battery.get_battery_subscription(battery_param))
-        self.request.sendall(message.encode())
+        
         if move_command == 'Auto_Run':
             move.Auto_Run()
-        elif move_command == 'Auto_Run_A':
-            move.Auto_Run_A()
-        elif move_command == 'Auto_Run_B':
-            move.Auto_Run_B()
+
         elif move_command == 'Emergency_Stop':
             move.Emergency_Stop()
 
@@ -58,10 +53,9 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
             print("ERROR: Invalid command")
         print(command_loaded)
         print(battery.get_battery_subscription(battery_param))
-#        TCP_clientX20.CLIENT_SEND()
-        #message = str(battery.get_battery_subscription(battery_param))
+        message = str(battery.get_battery_subscription(battery_param))
         # just send back ACK for data arrival confirmation
-#        self.request.sendall(message.encode())
+        self.request.sendall(message.encode())
 
 
 
