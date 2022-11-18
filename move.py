@@ -9,8 +9,11 @@ GPIO.setmode(GPIO.BOARD) #using physical pin numbers NOT "GPIOxx"
 
 timing = .00001
 
-limit_pin = 11 # physical pin 11
-GPIO.setup(limit_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+bottom_limit_pin = 11 # physical pin 11
+GPIO.setup(bottom_limit_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+top_limit_pin = 12
+GPIO.setup(top_limit_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 DIR = 10 #physical pin 10
 GPIO.setup(DIR, GPIO.OUT)
@@ -28,6 +31,8 @@ GPIO.setup(servo_yaw, GPIO.OUT)
 CW = 1
 CCW = 0
 
+#t_end = time.time() + 10 # 10 seconds for calibration before failure
+
 #when function is called, the name of the function inside is printed, helpful for debugging and... logging
 def log_call():
     print(inspect.stack()[1][3])
@@ -36,7 +41,7 @@ def log_call():
 #some of these functions can be likely be refactored to accept paramenter for ex. one function to 
 #change direction rather than two seperate functions
 def Auto_Run():
-    Calibrate()    # Always run calibrate
+    Calibrate(0)    # 0 is bottom limit
     Gripper('close')
     Jog_Z(10000,1)
     End_Effector_Yaw('CCW')
@@ -45,19 +50,18 @@ def Auto_Run():
     log_call()
 
 def Auto_Run_A():
-   Calibrate()
-   Gripper('close')
-   Jog_Z(10000,1)
-   End_Effector_Yaw('CCW')
    log_call()
+   Calibrate(0) # 0 is bottom limit
+   Gripper('close')
+   Calibrate(1) # top limit
+   End_Effector_Yaw('CCW')
 
 def Auto_Run_B():
-   End_Effector_Yaw('CW')
-   Calibrate()
-   Gripper('open')
    log_call()
-
-
+   #End_Effector_Yaw('CW')
+   #Calibrate(0) # 0 is bottom limit
+   #Gripper('open')
+   return Calibrate(1) # top limit
 
 def Emergency_Stop():
     subprocess.check_output('sudo reboot', shell=True) #shuts Pi down immediantly 
@@ -66,21 +70,38 @@ def Emergency_Stop():
 def Feed_Hold():
     log_call()
 
-def Calibrate():
+def Calibrate(direction):
     log_call()
-    GPIO.output(DIR,0) # set direction downward
-    while GPIO.input(limit_pin):
+    if direction == 0: # bottom limit
+        limit_pin = bottom_limit_pin
+    elif direction == 1: # top limit
+        limit_pin = top_limit_pin
+    else:
+        print("ERROR CHECK LIMIT PIN NUMBER")
+        return False # returns false (failure) if pin number isnt set correctly
+
+    t_end = time.time() + 10
+
+    # if direction  if  0 then then it will calibrate to the bottom, 1 calibrate to top
+    GPIO.output(DIR, direction) # set direction downward
+    while time.time() < t_end and GPIO.input(limit_pin): # Calibation runs for 10 seconds defined by "t_end" if takes more time calibration returns false (failure)
         GPIO.output(STEP, GPIO.HIGH)
         sleep(timing)
         GPIO.output(STEP, GPIO.LOW)
         sleep(timing)
-    GPIO.output(DIR,1)	# set direcion upward
+    if GPIO.input(limit_pin) == True: # True means that the limit switch has not been enaged
+        print("FAILURE: Calibration Timed out")
+        return False
+    GPIO.output(DIR, not direction)	# set direcion upward
     for i in range(300):
         GPIO.output(STEP, GPIO.HIGH)
         sleep(timing)
         GPIO.output(STEP, GPIO.LOW)
         sleep(timing)
     print("...Calibrated...")
+    return True
+
+
 
 def Jog_Z(steps,direction):     # 0/1 used to signify clockwise or counterclockwise.
     log_call()

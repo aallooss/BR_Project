@@ -148,23 +148,54 @@ data = {'Battery Percent'  :  float,
 
 # TCP Socket
 
+
+##Server
+The server will accept all of the following commands below in the format of a JSON, example below. The key "gX20" is present due to the formatting
+of the BnR X20 PLC. This formatting is ignored when the commands are parsed. The server is works sequentially as follows:
+
+1. Each paramter is loaded into memory.
+1. The parsed commands are sent back to the client in a JSON string as well as the battery information feedback.
+1. The commands are then ran sequentially. The first Auto_Run command incorperates all the commands together while Auto_Run_A and B
+run the pick up and drop off location respectively. 
+1. After movements are made there is a client called that communicates to the PLC to send "move_command" that was sent initially. 
+
+Note: Auto_Run_A and B provide a special feature that ends each run with a calibration to the top limit of the Z axis. This is done to ensure the 
+carriage is not in the way of the loading, or drop off dock. The calibration has 10 seconds to calibrate, if the limit switch is successfully reached 
+a the feeback will respond with "SUCCESS" and if it times out it will respond with "FAILURE". The PLC will receive a JSON like the following:
+```json
+data = { gX20 : {
+	'EZ3micro Command Completed' : 'Auto_Run_A',
+	'Calibration state	     : 'SUCCESS'
+		}
+	}
+```
+This calibration feedback can be read into the PLC's memory to determine whether to move to the next to the state or to handle the FAILURE ERROR.
+
+
+
+##Movement Commands
 The TCP Socket provides a little more flexability. The server accepts a JSON as input, the most basic data is below and a helpful table can be found below.
 ```json
-data = {
+data = { gX20 : {
         'Move_Commmand'         : 'Auto_Run',
         'Parameter_One'         : None,
         'Parameter_Two'         : None,
         'Battery_Subscribe'     : None
-        }
+        	}
+	}
 ```
 
 
-|  Move_Command  |  Parameter_One  |  Paramter_Two  | Battery Subscribe |
+|  Move_Command  |  Parameter_One  |  Paramter_Two   | Battery Subscribe |
 | :------------: | :-------------: | :-------------: | :---------------: |
-|    Auto_Run    |      None      |      None      |    True/False    |
-| Emergency_Stop |      None      |      None      |    True/False    |
-|   Feed_Hold   |      None      |      None      |    True/False    |
-|   Calibrate   |      None      |      None      |    True/False    |
-|     Jog_Z     | 1-10000 (steps) | 0/1 (direction) |    True/False    |
-|    Gripper    |   close/open   |      None      |    True/False    |
-|  Gripper_Yaw  |     CW/CCW     |      None      |    True/False    |
+|    Auto_Run    |      None       |      None       |    True/False     |
+|   Auto_Run_A   |      None       |      None       |    True/False     |
+|   Auto_Run_B   |      None       |      None       |    True/False     | 
+| Emergency_Stop |      None       |      None       |    True/False     |
+|   Feed_Hold    |      None       |      None       |    True/False     |
+|   Calibrate    |      0/1        |      None       |    True/False     |
+|     Jog_Z      | 1-10000 (steps) | 0/1 (direction) |    True/False     |
+|    Gripper     |   close/open    |      None       |    True/False     |
+|  Gripper_Yaw   |     CW/CCW      |      None       |    True/False     |
+
+

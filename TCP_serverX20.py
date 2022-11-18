@@ -24,12 +24,17 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
         print(move_command)
         message = str(battery.get_battery_subscription(battery_param))
         self.request.sendall(message.encode())
+        Calibration = None
         if move_command == 'Auto_Run':
             move.Auto_Run()
         elif move_command == 'Auto_Run_A':
-            move.Auto_Run_A()
+            if move.Auto_Run_A() == True:
+                Calibration = "SUCCESS"
         elif move_command == 'Auto_Run_B':
-            move.Auto_Run_B()
+            if move.Auto_Run_B() == True:
+                Calibration = "SUCCESS"
+            else:
+                Calibration = "FAILURE"
         elif move_command == 'Emergency_Stop':
             move.Emergency_Stop()
 
@@ -37,7 +42,7 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
             move.Feed_Hold()
 
         elif move_command == 'Calibrate':
-            move.Calibrate()
+            move.Calibrate(parameter_one) # this parameter determines direction 1 = up, 0 = down
 
         elif move_command == 'Jog_Z':
             move.Jog_Z(parameter_one, parameter_two)
@@ -51,7 +56,7 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
             print("ERROR: Invalid command")
         print(command_loaded)
         print(battery.get_battery_subscription(battery_param))
-        TCP_clientX20.CLIENT_SEND()
+        TCP_clientX20.CLIENT_SEND(move_command, Calibration)
         #message = str(battery.get_battery_subscription(battery_param))
         # just send back ACK for data arrival confirmation
 #        self.request.sendall(message.encode())
@@ -61,7 +66,7 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
 
 #  IP and PORT configuration is to be set up here
 if __name__ == "__main__":
-    HOST, PORT = "172.20.10.3", 9999
+    HOST, PORT = "172.20.10.5", 9999
 
     # Init the TCP server object, bind it to the chosen HOST and PORT
     tcp_server = socketserver.TCPServer((HOST, PORT), Handler_TCPServer)
