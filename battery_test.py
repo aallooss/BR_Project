@@ -9,12 +9,13 @@ import time
 
 #current_time = time.strftime("%H:%M:%S", t)
 
-filename = "test1.csv"
+filename = "test2.csv"
 columns = ['time', 'percent','current','voltage','cycle']
 
 cycle = 0
 while True:
 	t = time.localtime()
+
 	percent = subprocess.check_output('echo "get battery" | nc -q 0 127.0.0.1 8423', shell=True)
 	current = subprocess.check_output('echo "get battery_i" | nc -q 0 127.0.0.1 8423', shell=True)
 	voltage = subprocess.check_output('echo "get battery_v" | nc -q 0 127.0.0.1 8423', shell=True)
@@ -31,9 +32,11 @@ while True:
 
 #while True:
 	move.Auto_Run()
+
 	with open(filename, 'a', newline='') as csvfile:
 		csvwriter = csv.writer(csvfile)
 #		csvwriter.writerow(columns)
 		csvwriter.writerow(battery_dict[0:])
 	cycle += 1
+
 	sleep(3)

@@ -7,7 +7,7 @@ from time import sleep
 
 GPIO.setmode(GPIO.BOARD) #using physical pin numbers NOT "GPIOxx"
 
-timing = .000000001
+timing = .00001
 
 limit_pin = 11 # physical pin 11
 GPIO.setup(limit_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -37,13 +37,28 @@ def log_call():
 #change direction rather than two seperate functions
 def Auto_Run():
     Calibrate()    # Always run calibrate
-    Gripper('open')
-    Jog_Z(4000,1)
-    End_Effector_Yaw('CW')
-    End_Effector_Yaw('CCW')
     Gripper('close')
+    Jog_Z(10000,1)
+    End_Effector_Yaw('CCW')
+    End_Effector_Yaw('CW')
+    Gripper('open')
     log_call()
-    
+
+def Auto_Run_A():
+   Calibrate()
+   Gripper('close')
+   Jog_Z(10000,1)
+   End_Effector_Yaw('CCW')
+   log_call()
+
+def Auto_Run_B():
+   End_Effector_Yaw('CW')
+   Calibrate()
+   Gripper('open')
+   log_call()
+
+
+
 def Emergency_Stop():
     subprocess.check_output('sudo reboot', shell=True) #shuts Pi down immediantly 
     log_call()
@@ -96,18 +111,18 @@ def Gripper(direction):
 
     p = GPIO.PWM(servo_gripper, 50)
     p.start(0)
-    if direction == "close":
-        for  i in range(0,181):
-            sig=(i/18)+2
-            p.ChangeDutyCycle(sig)
-            sleep(0.003)
-        print("CLOSED gripper")
-    elif direction == "open":
-        for i in range(180,-1,-1):
+    if direction == "open":
+        for  i in range(0,180):
             sig=(i/18)+2
             p.ChangeDutyCycle(sig)
             sleep(0.003)
         print("OPENED gripper")
+    elif direction == "close":
+        for i in range(181,-1,-1):
+            sig=(i/18)+2
+            p.ChangeDutyCycle(sig)
+            sleep(0.003)
+        print("CLOSED gripper")
     else:
         print("ERROR: Gripper - check command spelling")
     p.stop()
