@@ -1,7 +1,7 @@
 import socket
 import json
 
-host_ip, server_port = "192.168.0.101", 9999
+host_ip, server_port = "172.20.10.2", 8888
 data = {'gX20_hello_jeremy' : {'Command State'     : 'Finished'}}
 data_string = json.dumps(data)              # data serialized
 

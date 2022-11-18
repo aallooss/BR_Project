@@ -112,13 +112,13 @@ def Gripper(direction):
     p = GPIO.PWM(servo_gripper, 50)
     p.start(0)
     if direction == "open":
-        for  i in range(0,220):
+        for  i in range(0,180):
             sig=(i/18)+2
             p.ChangeDutyCycle(sig)
             sleep(0.003)
         print("OPENED gripper")
     elif direction == "close":
-        for i in range(220,-1,-1):
+        for i in range(181,-1,-1):
             sig=(i/18)+2
             p.ChangeDutyCycle(sig)
             sleep(0.003)
