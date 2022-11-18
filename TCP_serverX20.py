@@ -7,13 +7,6 @@ import battery
 import TCP_clientX20
 
 class Handler_TCPServer(socketserver.BaseRequestHandler):
-    """
-    The TCP Server class for demonstration.
-
-    Note: We need to implement the Handle method to exchange data
-    with TCP client.
-
-    """
 
     def handle(self):
         # self.request - TCP socket connected to the client
