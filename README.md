@@ -149,7 +149,7 @@ data = {'Battery Percent'  :  float,
 # TCP Socket
 
 
-##Server
+## Server
 The server will accept all of the following commands below in the format of a JSON, example below. The key "gX20" is present due to the formatting
 of the BnR X20 PLC. This formatting is ignored when the commands are parsed. The server is works sequentially as follows:
 
@@ -165,7 +165,7 @@ a the feeback will respond with "SUCCESS" and if it times out it will respond wi
 ```json
 data = { gX20 : {
 	'EZ3micro Command Completed' : 'Auto_Run_A',
-	'Calibration state	     : 'SUCCESS'
+	'Calibration state'	     : 'SUCCESS'
 		}
 	}
 ```
