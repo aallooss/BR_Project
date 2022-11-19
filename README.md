@@ -202,6 +202,7 @@ $ python TCP_client.py
 The servers will stay open and the terminal TCP_client was ran in can continue to send commands until TCP_serverX20.py is closed.
 
 Note: The Host IP and Port of TCP_serverX20.py and TCP_client.py must match, next TCP_server.py and TCP_clientX20.py must match.
+Also Note: TCP_clientX20.py is not ran like the other files manually but is called from inside TCP_serverX20.py
 
 ##Movement Commands
 
