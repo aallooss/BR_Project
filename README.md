@@ -174,7 +174,7 @@ data = { gX20 : {
 
 This calibration feedback can be read into the PLC's memory to determine whether to move to the next to the state or to handle the FAILURE ERROR.
 
-##How to Start TCP testing
+## How to Start TCP testing
 
 There are pairs of TCP sockets:
 
@@ -204,7 +204,7 @@ The servers will stay open and the terminal TCP_client was ran in can continue t
 Note: The Host IP and Port of TCP_serverX20.py and TCP_client.py must match, next TCP_server.py and TCP_clientX20.py must match.
 Also Note: TCP_clientX20.py is not ran like the other files manually but is called from inside TCP_serverX20.py
 
-##Movement Commands
+## Movement Commands
 
 The TCP Socket provides a little more flexability. The server accepts a JSON as input, the most basic data is below and a helpful table can be found below.
 
