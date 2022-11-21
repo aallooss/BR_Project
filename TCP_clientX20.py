@@ -6,9 +6,23 @@ host_ip, server_port = "172.20.10.2", 8888
 # Initialize a TCP client socket using SOCK_STREAM
 def CLIENT_SEND(feedback, calibration):
     tcp_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    
+    # commented out due to PLC formatting
+    '''
     data = {'EZ3micro Command Completed' : feedback,
             'Calibration state'          : calibration}
     data_string = json.dumps(data) #data serialized
+    '''
+
+    # for X20 PLC use format below:
+    # needs outer dict and no spaces since it parses keys as variables in PLC
+    outer_dict = dict()
+    data = {'move_command'      : feedback,
+            'calibration_state' : calibration}
+    outer_dict['data'] = data
+    data_string = json.dumps(outer_dict) # data serialized
+
+
     try:
         # Establish connection to TCP server and exchange data
         tcp_client.connect((host_ip, server_port))
