@@ -174,7 +174,7 @@ data = { gX20 : {
 
 This calibration feedback can be read into the PLC's memory to determine whether to move to the next to the state or to handle the FAILURE ERROR.
 
-##How to Start TCP testing
+## How to Start TCP testing
 
 There are pairs of TCP sockets:
 
@@ -188,21 +188,23 @@ and
 
 The first pair of files are used by the Pi and the second pair is to emulate what the PLC will run. To start this communication do the following on the Pi:
 
+```sh
 $ python TCP_serverX20.py
-
+```
 Now that the Pi is running the server, it is listening for commands from the PLC. Emulate the PLC with the following on a seperate PC on the network:
-
+```sh
 $ python TCP_server.py
-
+```
 This server will receive move_command and calibration feedback in a JSON. In a seperate terminal run the client below:
-
+```sh
 $ python TCP_client.py
-
+```
 The servers will stay open and the terminal TCP_client was ran in can continue to send commands until TCP_serverX20.py is closed.
 
 Note: The Host IP and Port of TCP_serverX20.py and TCP_client.py must match, next TCP_server.py and TCP_clientX20.py must match.
+Also Note: TCP_clientX20.py is not ran like the other files manually but is called from inside TCP_serverX20.py
 
-##Movement Commands
+## Movement Commands
 
 The TCP Socket provides a little more flexability. The server accepts a JSON as input, the most basic data is below and a helpful table can be found below.
 
