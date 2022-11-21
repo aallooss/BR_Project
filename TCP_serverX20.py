@@ -71,6 +71,8 @@ if __name__ == "__main__":
     tcp_server = socketserver.TCPServer((HOST, PORT), Handler_TCPServer)
 
     print("TCP server active")
+    TCP_clientX20.CLIENT_SEND("Ready", None)   
+    
     move.Calibrate(0)
     # Activate the TCP server.
     # To abort the TCP server, press Ctrl-C.
@@ -84,6 +86,8 @@ def web_callable():
     tcp_server = socketserver.TCPServer((HOST, PORT), Handler_TCPServer)
 
     print("TCP server active")
+    TCP_clientX20.CLIENT_SEND("Ready", None)   
+
     move.Calibrate(0)
     # Activate the TCP server.
     # To abort the TCP server, press Ctrl-C.
