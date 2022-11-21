@@ -123,7 +123,7 @@ def Jog_Z(steps,direction):     # 0/1 used to signify clockwise or counterclockw
         sleep(timing) # Dictates how fast stepper motor will run
         if GPIO.input(limit_pin) == 0:
             print('ERROR: limit reached')
-            Calibrate()
+            Calibrate(0)
             return
     # GPIO.cleanup()
 

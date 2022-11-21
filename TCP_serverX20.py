@@ -14,7 +14,6 @@ class Handler_TCPServer(socketserver.BaseRequestHandler):
         print(command)
         command_loaded = json.loads(command) #data loaded
 
-        print(command_loaded)
         command_loaded = list(command_loaded.values())[0]
         print(command_loaded)
         move_command = list(command_loaded.values())[0]
@@ -71,9 +70,10 @@ if __name__ == "__main__":
     # Init the TCP server object, bind it to the chosen HOST and PORT
     tcp_server = socketserver.TCPServer((HOST, PORT), Handler_TCPServer)
 
+    print("TCP server active")
+    move.Calibrate(0)
     # Activate the TCP server.
     # To abort the TCP server, press Ctrl-C.
-    print("TCP server active")
     tcp_server.serve_forever()
 
 #webcalable function, used for HMI button
@@ -83,6 +83,8 @@ def web_callable():
     # Init the TCP server object, bind it to the chosen HOST and PORT
     tcp_server = socketserver.TCPServer((HOST, PORT), Handler_TCPServer)
 
+    print("TCP server active")
+    move.Calibrate(0)
     # Activate the TCP server.
     # To abort the TCP server, press Ctrl-C.
     tcp_server.serve_forever()
