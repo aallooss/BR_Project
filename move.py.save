@@ -1,22 +1,13 @@
 import inspect
-import socketserver
-import move
-import os
-import json
-import subprocess
-import battery
-import TCP_clientX20
-import RPi.GPIO as GPIO
 import time
+import subprocess
+import json
+import RPi.GPIO as GPIO
 from time import sleep
 
-GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BOARD) #using physical pin numbers NOT "GPIOxx"
 
-servo_gripper= 32
-GPIO.setup(servo_gripper, GPIO.OUT)
-
-
-timing = .0000000003
+timing = .00001
 
 bottom_limit_pin = 11 # physical pin 11
 GPIO.setup(bottom_limit_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -29,6 +20,9 @@ GPIO.setup(DIR, GPIO.OUT)
 
 STEP = 8 # physical pin 8
 GPIO.setup(STEP, GPIO.OUT)
+
+servo_gripper = 32
+GPIO.setup(servo_gripper, GPIO.OUT)
 
 servo_yaw = 38
 GPIO.setup(servo_yaw, GPIO.OUT)
@@ -59,14 +53,14 @@ def Auto_Run_A():
    log_call()
    Calibrate(0) # 0 is bottom limit
    Gripper('close')
-   End_Effector_Yaw('CCW')
-   return Calibrate(1)
+   Calibrate(1) # top limit
+   E
 
 def Auto_Run_B():
    log_call()
-   End_Effector_Yaw('CW')
-   Calibrate(0) # 0 is bottom limit
-   Gripper('open')
+   #End_Effector_Yaw('CW')
+   #Calibrate(0) # 0 is bottom limit
+   #Gripper('open')
    return Calibrate(1) # top limit
 
 def Emergency_Stop():
@@ -75,16 +69,6 @@ def Emergency_Stop():
 
 def Feed_Hold():
     log_call()
-    Calibrate(0)
-    grip= [0,100]
-    for  i in grip:
-       sig=(70/18)+2
-       p.ChangeDutyCycle(sig)
-       sleep(0.3)
-       if i == 100:
-         break
-    Calibrate(1)
-    return p.ChangeDutyCycle(sig)
 
 def Calibrate(direction):
     log_call()
@@ -95,7 +79,8 @@ def Calibrate(direction):
     else:
         print("ERROR CHECK LIMIT PIN NUMBER")
         return False # returns false (failure) if pin number isnt set correctly
-
+    
+    print(limit_pin)
     t_end = time.time() + 10
 
     # if direction  if  0 then then it will calibrate to the bottom, 1 calibrate to top
@@ -139,33 +124,27 @@ def Jog_Z(steps,direction):     # 0/1 used to signify clockwise or counterclockw
         sleep(timing) # Dictates how fast stepper motor will run
         if GPIO.input(limit_pin) == 0:
             print('ERROR: limit reached')
-            Calibrate(0)
+            Calibrate()
             return
     # GPIO.cleanup()
 
 def Gripper(direction):
     log_call()
-    grip= [0,100]
+
+    p = GPIO.PWM(servo_gripper, 50)
+    p.start(0)
     if direction == "open":
-        for  i in grip:
-            sig=(150/18)+2
+        for  i in range(0,180):
+            sig=(i/18)+2
             p.ChangeDutyCycle(sig)
-            sleep(0.3)
-            if i == 100:
-               break
+            sleep(0.003)
         print("OPENED gripper")
-        return p.ChangeDutyCycle(0)
     elif direction == "close":
-        grip= [0,100]
-        for i in grip:
-           sig=(50/18)+2
-           p.ChangeDutyCycle(sig)
-           sleep(0.3)
-           if i == 100:
-              break
+        for i in range(181,-1,-1):
+            sig=(i/18)+2
+            p.ChangeDutyCycle(sig)
+            sleep(0.003)
         print("CLOSED gripper")
-        return p.ChangeDutyCycle(0)
-        
     else:
         print("ERROR: Gripper - check command spelling")
     p.stop()
@@ -191,100 +170,4 @@ def End_Effector_Yaw(direction):
     p.stop()
    # GPIO.cleanup()
 
-def test():
-    log.call()
-    Calibrate(0)
-    Gripper('open')
-    Calibrate(1)
 
-
-
-class Handler_TCPServer(socketserver.BaseRequestHandler):
-
-    def handle(self):
-        # self.request - TCP socket connected to the client
-        command = self.request.recv(1024).strip().decode('utf-8')
-        print(command)
-        command_loaded = json.loads(command) #data loaded
-
-        command_loaded = list(command_loaded.values())[0]
-        print(command_loaded)
-        move_command = list(command_loaded.values())[0]
-        parameter_one = list(command_loaded.values())[1]
-        parameter_two = list(command_loaded.values())[2]
-        battery_param = list(command_loaded.values())[3]
-        print(move_command)
-        message = str(battery.get_battery_subscription(battery_param))
-        self.request.sendall(message.encode())
-        Calibration = None
-        if move_command == 'Auto_Run':
-            Auto_Run()
-        elif move_command == 'Auto_Run_A':
-            if Auto_Run_A() == True:
-                Calibration = "SUCCESS"
-            else:
-                Calibration = "FAILURE"
-        elif move_command == 'Auto_Run_B':
-            if Auto_Run_B() == True:
-                Calibration = "SUCCESS"
-            else:
-                Calibration = "FAILURE"
-        elif move_command == 'Emergency_Stop':
-            Emergency_Stop()
-
-        elif move_command == 'Feed_Hold':
-            Feed_Hold()
-
-        elif move_command == 'Calibrate':
-            Calibrate(parameter_one) # this parameter determines direction 1 = up, 0 = down
-
-        elif move_command == 'Jog_Z':
-            Jog_Z(parameter_one, parameter_two)
-
-        elif move_command == 'Gripper':
-            Gripper(parameter_one)
-
-        elif move_command == 'Gripper_Yaw':
-            End_Effector_Yaw(parameter_one)
-        else:
-            print("ERROR: Invalid command")
-        print(command_loaded)
-        print(battery.get_battery_subscription(battery_param))
-        TCP_clientX20.CLIENT_SEND(move_command, Calibration)
-        #message = str(battery.get_battery_subscription(battery_param))
-        # just send back ACK for data arrival confirmation
-#        self.request.sendall(message.encode())
-
-
-
-
-#  IP and PORT configuration is to be set up here
-if __name__ == "__main__":
-    HOST, PORT = "192.168.0.103", 9999
-
-    # Init the TCP server object, bind it to the chosen HOST and PORT
-    tcp_server = socketserver.TCPServer((HOST, PORT), Handler_TCPServer)
-
-    print("TCP server active")
-    Calibrate(1)
-    p = GPIO.PWM(servo_gripper, 50)
-    p.start(0)
-    p.ChangeDutyCycle(150/18 +2)
-    sleep(0.3)
-    p.ChangeDutyCycle(0)
-    # Activate the TCP server.
-    # To abort the TCP server, press Ctrl-C.
-    tcp_server.serve_forever()
-
-#webcalable function, used for HMI button
-def web_callable():
-    HOST, PORT = "192.168.0.101", 9999
-
-    # Init the TCP server object, bind it to the chosen HOST and PORT
-    tcp_server = socketserver.TCPServer((HOST, PORT), Handler_TCPServer)
-
-    print("TCP server active")
-    Calibrate(0)
-    # Activate the TCP server.
-    # To abort the TCP server, press Ctrl-C.
-    tcp_server.serve_forever()

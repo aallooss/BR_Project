@@ -1,7 +1,7 @@
 import socket
 import json
 
-host_ip, server_port = "192.168.0.100", 8888
+host_ip, server_port = "192.168.0.10", 8888
 
 # Initialize a TCP client socket using SOCK_STREAM
 def CLIENT_SEND(feedback, calibration):
