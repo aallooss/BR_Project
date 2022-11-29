@@ -28,7 +28,7 @@ Install the required dependencies in your cirtual environment using the command 
 ```sh
 pip install -r requirements.txt
 ```
-# Battery
+## Battery Management
 
 The Pi uses a UPS called a PiSugar 2. The program collects battery information via TCP from the board over a I2C connection from the Pi to the hat. For this functionality follow the README in the respective repository. [`PiSugar Battery Manager`](https://github.com/PiSugar/pisugar-power-manager-rs)
 
