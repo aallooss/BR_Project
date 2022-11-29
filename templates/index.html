@@ -18,19 +18,23 @@
                     <div class="col-lg-4 mb-5 mb-lg-0">
                         <div class="feature bg-dark bg-gradient text-white rounded-3 mb-3"><i class="bi bi-toggles2"></i></div>
                         <h2 class="h4 fw-bolder">Power</h2>
-                        <p>With over 1 hour of battery life, you can pick and place for a lifetime</p>
+                        <p>With over 5 hours of battery life, you can pick and place for a lifetime</p>
                     </div>
                 </div>
             </div>
         </section>
         <!-- Product Video -->
-        <section class="bg-light text-center py-3 border-bottom">
-            <div class="container px-3">
-                <div class="iframe-container">
+        <section class="bg-light text-center p-1 border-bottom">
+            <!-- <div class="container p-1"> -->
+                <!-- <div class="iframe-container">
                     <!--<iframe width="560" height="349" src="https://www.youtube.com/watch?v=S6cQpoUxeC8" allowfullscreen ></iframe>-->
-                    <embed src="{{ url_for('static', filename='assets/6d.mp4')}}" autostart="false" width="1120" height="698" /></embed>
-                </div> 
+                    <!-- <embed src="{{ url_for('static', filename='assets/6d.mp4')}}" autostart="false" width="1120" height="698" style="width:100%"/></embed>
+                </div>  --><div>
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="{{ url_for('static', filename='assets/6d.mp4')}}" allowfullscreen width="1120" height="698" style="width:100%"></iframe>
+                <!-- </div> -->
             </div>
+            </div>  
         </section>
         <!--Image Gallery-->
         <section class="border-bottom py-3">
