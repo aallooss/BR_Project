@@ -103,7 +103,7 @@ For PLC usage there are a collection of endpoints. There are three base movement
 
 The no parameter can be requested as such
 
-## No paramter
+## No parameter
 
 > <robot_ip>:5000/api/no_parameter?move_command="move command"&battery="True/False"
 
