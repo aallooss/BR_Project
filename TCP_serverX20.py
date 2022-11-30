@@ -270,18 +270,15 @@ if __name__ == "__main__":
     tcp_server = socketserver.TCPServer((HOST, PORT), Handler_TCPServer)
 
     print("TCP server active")
-<<<<<<< HEAD
     Calibrate(1)
     p = GPIO.PWM(servo_gripper, 50)
     p.start(0)
     p.ChangeDutyCycle(150/18 +2)
     sleep(0.3)
     p.ChangeDutyCycle(0)
-=======
     TCP_clientX20.CLIENT_SEND("Ready", None)   
     
     move.Calibrate(0)
->>>>>>> 640ee827dc6a80313f4bbbaa8e95274d4efc6c5b
     # Activate the TCP server.
     # To abort the TCP server, press Ctrl-C.
     tcp_server.serve_forever()
@@ -294,13 +291,10 @@ def web_callable():
     tcp_server = socketserver.TCPServer((HOST, PORT), Handler_TCPServer)
 
     print("TCP server active")
-<<<<<<< HEAD
     Calibrate(0)
-=======
     TCP_clientX20.CLIENT_SEND("Ready", None)   
 
     move.Calibrate(0)
->>>>>>> 640ee827dc6a80313f4bbbaa8e95274d4efc6c5b
     # Activate the TCP server.
     # To abort the TCP server, press Ctrl-C.
     tcp_server.serve_forever()
