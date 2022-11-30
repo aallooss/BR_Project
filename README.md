@@ -233,3 +233,17 @@ data = { gX20 : {
 |     Jog_Z     | 1-10000 (steps) | 0/1 (direction) |    True/False    |
 |    Gripper    |   close/open   |      None      |    True/False    |
 |  Gripper_Yaw  |     CW/CCW     |      None      |    True/False    |
+
+## Starting Communication with PLC
+
+1. Ensure the PLC is assigned 192.168.0.105
+1. Ensure the EZ3micro is assigned 192.168.0.102
+1. Open PLC HMI on PLC on ['192.168.0.105:81'](192.168.0.105:81)
+1. Run TCP server on EZ3micro
+```sh
+python TCP_serverX20.py
+```
+1. Ensure PLC received "Ready" message
+
+The PLC is now connected to the EZ3micro and bidirectional communication is established. 
+
