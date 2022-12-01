@@ -4,10 +4,11 @@ import subprocess
 import json
 import RPi.GPIO as GPIO
 from time import sleep
+import TCP_serverX20
 
 GPIO.setmode(GPIO.BOARD) #using physical pin numbers NOT "GPIOxx"
 
-timing = .00001
+timing = .0000003
 
 bottom_limit_pin = 11 # physical pin 11
 GPIO.setup(bottom_limit_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -20,9 +21,6 @@ GPIO.setup(DIR, GPIO.OUT)
 
 STEP = 8 # physical pin 8
 GPIO.setup(STEP, GPIO.OUT)
-
-servo_gripper = 32
-GPIO.setup(servo_gripper, GPIO.OUT)
 
 servo_yaw = 38
 GPIO.setup(servo_yaw, GPIO.OUT)
@@ -53,14 +51,14 @@ def Auto_Run_A():
    log_call()
    Calibrate(0) # 0 is bottom limit
    Gripper('close')
-   Calibrate(1) # top limit
    End_Effector_Yaw('CCW')
+   return Calibrate(1)
 
 def Auto_Run_B():
    log_call()
-   #End_Effector_Yaw('CW')
-   #Calibrate(0) # 0 is bottom limit
-   #Gripper('open')
+   End_Effector_Yaw('CW')
+   Calibrate(0) # 0 is bottom limit
+   Gripper('open')
    return Calibrate(1) # top limit
 
 def Emergency_Stop():
@@ -69,6 +67,17 @@ def Emergency_Stop():
 
 def Feed_Hold():
     log_call()
+    Calibrate(0)
+    grip= [0,100]
+    p=TCP_serverX20.p
+    for  i in grip:
+       sig=(100/18)+2
+       p.ChangeDutyCycle(sig)
+       sleep(0.3)
+       if i == 100:
+         break
+    Calibrate(1)
+    return p.ChangeDutycycle(sig)
 
 def Calibrate(direction):
     log_call()
@@ -129,24 +138,25 @@ def Jog_Z(steps,direction):     # 0/1 used to signify clockwise or counterclockw
 
 def Gripper(direction):
     log_call()
-
-    p = GPIO.PWM(servo_gripper, 50)
-    p.start(0)
+    grip= [0,100]
     if direction == "open":
-        for  i in range(0,180):
-            sig=(i/18)+2
-            p.ChangeDutyCycle(sig)
-            sleep(0.003)
+        for  i in grip:
+            sig=(100/18)+2
+            TCP_serverX20.p.ChangeDutyCycle(sig)
+            sleep(0.3)
+            TCP_serverX20.p.ChangeDutyCycle(0)
+            if i == 100:
+               break
         print("OPENED gripper")
     elif direction == "close":
         for i in range(181,-1,-1):
             sig=(i/18)+2
-            p.ChangeDutyCycle(sig)
+            TCP_serverX20.p.ChangeDutyCycle(sig)
             sleep(0.003)
         print("CLOSED gripper")
     else:
         print("ERROR: Gripper - check command spelling")
-    p.stop()
+    TCP_serverX20.p.stop()
   #  GPIO.cleanup()
 
 def End_Effector_Yaw(direction):
@@ -169,4 +179,9 @@ def End_Effector_Yaw(direction):
     p.stop()
    # GPIO.cleanup()
 
+def test():
+    log.call()
+    Calibrate(0)
+    Gripper('open')
+    Calibrate(1)
 

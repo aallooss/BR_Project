@@ -84,8 +84,10 @@ def battery_info():
 def HMI():
 	if request.method == 'POST':
 		#names of these values are important as they coorespond to the button values on 'HMI.html'
-		if request.form['submit_button'] == 'Auto Run':
-			move.Auto_Run()
+		if request.form['submit_button'] == 'Auto Run A':
+			move.Auto_Run_A()
+		if request.form['submit_button'] == 'Auto Run B':
+			move.Auto_Run_B()
 
 		elif request.form['submit_button'] == 'Emergency Stop':
 			move.Emergency_Stop()
@@ -93,8 +95,10 @@ def HMI():
 		elif request.form['submit_button'] == 'Feed Hold':
 			move.Feed_Hold()
 
-		elif request.form['submit_button'] == 'Calibrate':
-			move.Calibrate()
+		elif request.form['submit_button'] == 'Calibrate Low':
+			move.Calibrate(0)
+		elif request.form['submit_button'] == 'Calibrate High':
+			move.Calibrate(1)
 
 		elif request.form['submit_button'] == 'Jog Z+':
 			move.Jog_Z(3000,1)
@@ -122,4 +126,3 @@ def HMI():
 #MAIN
 if __name__ == '__main__':
     app.run(host='192.168.0.102', debug=True) # flask run --host=0.0.0.0 to run on LAN
-	#yerrrrrrrr

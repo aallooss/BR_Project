@@ -28,6 +28,9 @@ Install the required dependencies in your cirtual environment using the command 
 ```sh
 pip install -r requirements.txt
 ```
+## Battery Management
+
+The Pi uses a UPS called a PiSugar 2. The program collects battery information via TCP from the board over a I2C connection from the Pi to the hat. For this functionality follow the README in the respective repository. [`PiSugar Battery Manager`](https://github.com/PiSugar/pisugar-power-manager-rs)
 
 ## Windows
 
@@ -100,7 +103,7 @@ For PLC usage there are a collection of endpoints. There are three base movement
 
 The no parameter can be requested as such
 
-## No paramter
+## No parameter
 
 > <robot_ip>:5000/api/no_parameter?move_command="move command"&battery="True/False"
 
@@ -230,3 +233,17 @@ data = { gX20 : {
 |     Jog_Z     | 1-10000 (steps) | 0/1 (direction) |    True/False    |
 |    Gripper    |   close/open   |      None      |    True/False    |
 |  Gripper_Yaw  |     CW/CCW     |      None      |    True/False    |
+
+## Starting Communication with PLC
+
+1. Ensure the PLC is assigned 192.168.0.105
+1. Ensure the EZ3micro is assigned 192.168.0.102
+1. Open PLC HMI on PLC on ['192.168.0.105:81'](192.168.0.105:81)
+1. Run TCP server on EZ3micro
+```sh
+python TCP_serverX20.py
+```
+1. Ensure PLC received "Ready" message
+
+The PLC is now connected to the EZ3micro and bidirectional communication is established. 
+
