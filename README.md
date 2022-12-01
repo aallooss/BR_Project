@@ -2,6 +2,10 @@
 
 ## Kennesaw State University X B&R Automation
 
+<p class="row" align="center">
+	<img src="/photos/v10.JPG" width=50% height=50%>
+</p>
+
 ## How to start
 
 The second way is to manually clone this repository and change it later by own. Project is ready to run (with some requirements). You need to clone and run:
@@ -247,3 +251,10 @@ python TCP_serverX20.py
 
 The PLC is now connected to the EZ3micro and bidirectional communication is established. 
 
+## Custom PCB
+For reference below is the custom PCB that was used to run the stepper motor. Please see gerber files in the repo.
+
+<p class="row" align="center">
+    	<img src="/photos/PCB_Front.png" width=50% height=50%>
+    	<img src="/photos/PCB_Back.png" width=50% height=50%>
+</p> 
